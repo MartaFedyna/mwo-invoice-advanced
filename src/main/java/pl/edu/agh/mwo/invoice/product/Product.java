@@ -10,24 +10,33 @@ public abstract class Product {
 	private final BigDecimal taxPercent;
 
 	protected Product(String name, BigDecimal price, BigDecimal tax) {
-		this.name = name;
-		this.price = price;
+		if(name!=null && name!=""){
+			this.name = name;
+		} else {
+			throw new IllegalArgumentException();
+		}
+		
+		if (price != null && price.compareTo(BigDecimal.ZERO)>0){
+			this.price = price;
+		} else {
+			throw new IllegalArgumentException();
+		}
 		this.taxPercent = tax;
 	}
 
 	public String getName() {
-		return null;
+		return this.name;
 	}
 
 	public BigDecimal getPrice() {
-		return null;
+		return this.price;
 	}
 
 	public BigDecimal getTaxPercent() {
-		return null;
+		return this.taxPercent;
 	}
 
 	public BigDecimal getPriceWithTax() {
-		return null;
+		return (new BigDecimal(1).add(this.taxPercent).multiply(this.price));
 	}
 }
