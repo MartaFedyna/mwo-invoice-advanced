@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import java.math.BigDecimal;
 
+import org.hamcrest.Matchers;
+import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import pl.edu.agh.mwo.invoice.Invoice;
@@ -17,6 +20,11 @@ public class InvoiceTest {
 	private static final String PRODUCT_2 = "Product 2";
 	private static final String PRODUCT_3 = "Product 3";
 
+	@Before
+	public void resetInvoiceNumber(){
+		Invoice.ResetNextNumber();
+	}
+	
 	@Test
 	public void testEmptyInvoiceHasEmptySubtotal() {
 		Invoice invoice = createEmptyInvoice();
@@ -99,6 +107,41 @@ public class InvoiceTest {
 		invoice.addProduct(createTaxFreeProduct(), -1);
 	}
 
+	/* Ponizej test standardowy
+	@Test
+	public void testInvoiceHasNumberGreaterThanZero(){
+		Invoice invoice = createEmptyInvoice();
+		Assert.assertTrue(invoice.getNumber()>0);
+	}
+	*/
+	
+	// W metodzie ponizej korzystamy z Hamcrest
+	@Test
+	public void testInvoiceHasNumberGreaterThanZero(){
+		Invoice invoice = createEmptyInvoice();
+		Assert.assertThat(invoice.getNumber(), Matchers.greaterThan(0));
+	}
+	
+	@Test
+	public void testIfTwoInvoicesHasDifferentNumbers(){
+		Invoice invoice = createEmptyInvoice();
+		Invoice invoice1 = createEmptyInvoice();
+		Assert.assertNotEquals(invoice.getNumber(), invoice1.getNumber());
+	}
+	
+	@Test
+	public void testInvoiceAlwaysHasTheSameNumber(){
+		Invoice invoice = createEmptyInvoice();
+		Assert.assertEquals(invoice.getNumber(), invoice.getNumber());
+	}
+	
+	@Test
+	public void testInvoiceAlwaysHasDifferentNumber(){
+		Invoice invoice = createEmptyInvoice();
+		Assert.assertEquals(invoice.getNumber(), invoice.getNumber());
+	}
+	
+	
 	private Invoice createEmptyInvoice() {
 		return new Invoice();
 	}
@@ -122,5 +165,7 @@ public class InvoiceTest {
 	private void assertBigDecimalsAreEqual(BigDecimal expected, BigDecimal actual) {
 		assertEquals(expected.stripTrailingZeros(), actual.stripTrailingZeros());
 	}
+	
+
 
 }

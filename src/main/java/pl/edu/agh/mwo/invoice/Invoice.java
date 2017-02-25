@@ -7,6 +7,17 @@ import pl.edu.agh.mwo.invoice.product.Product;
 
 public class Invoice {
 	private HashMap<Product, Integer> products=new HashMap<Product, Integer>();
+	private int invoiceNumber;
+	private static int nextNumber=1; //static - nie należy do instancji obiektu więc jest przechowywany niezale znie od instancji
+	
+	public Invoice(){
+		this.invoiceNumber=nextNumber;
+		nextNumber+=1;
+	}
+
+	public static void ResetNextNumber(){
+		nextNumber=1;
+	}
 	
 	public void addProduct(Product product) {
 		if(products.containsKey(product)){
@@ -66,5 +77,9 @@ public class Invoice {
 			}
 			return total;
 		}
+	}
+
+	public Integer getNumber() {
+		return invoiceNumber;
 	}
 }
