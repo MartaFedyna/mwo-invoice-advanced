@@ -82,4 +82,17 @@ public class Invoice {
 	public Integer getNumber() {
 		return invoiceNumber;
 	}
+
+	public String printedVersion() {
+		String printed = String.valueOf(invoiceNumber);
+		for(Product product: products.keySet()){
+			printed+="\n"+product.getName();
+			printed+=", "+product.getClass().getName();
+			printed+=", "+products.get(product);
+		}
+		
+		printed+="\nLiczba pozycji: "+products.size();
+		
+		return printed;
+	}
 }

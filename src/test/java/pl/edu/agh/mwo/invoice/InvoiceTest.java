@@ -141,6 +141,56 @@ public class InvoiceTest {
 		Assert.assertEquals(invoice.getNumber(), invoice.getNumber());
 	}
 	
+	@Test
+	public void testPrintedInvoiceHasNumber(){
+		Invoice invoice = createEmptyInvoice();
+		int number = invoice.getNumber();
+		String printedInvoice = invoice.printedVersion();
+		Assert.assertThat(printedInvoice, Matchers.containsString(String.valueOf(number)));
+	}
+	
+	@Test
+	public void testPrintedInvoiceHasProductName(){
+		Invoice invoice = createEmptyInvoice();
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal("100")));
+		String printedInvoice = invoice.printedVersion();
+		Assert.assertThat(printedInvoice, Matchers.containsString("Mleko"));
+	}
+	
+	@Test
+	public void testPrintedInvoiceHasProductType(){
+		Invoice invoice = createEmptyInvoice();
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal("100")));
+		String printedInvoice = invoice.printedVersion();
+		Assert.assertThat(printedInvoice, Matchers.containsString("DairyProduct"));
+	}
+	
+	@Test
+	public void testPrintedInvoiceHasProducQuantity(){
+		Invoice invoice = createEmptyInvoice();
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal("100")),1827);
+		String printedInvoice = invoice.printedVersion();
+		Assert.assertThat(printedInvoice, Matchers.containsString("1827"));
+	}
+	
+	@Test
+	public void testPrintedInvoiceSize(){
+		Invoice invoice = createEmptyInvoice();
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal("100")),1827);
+		invoice.addProduct(new DairyProduct("Mleko2", new BigDecimal("100")),1827);
+		invoice.addProduct(new DairyProduct("Mleko3", new BigDecimal("100")),1827);
+		String printedInvoice = invoice.printedVersion();
+		Assert.assertThat(printedInvoice, Matchers.containsString("Liczba pozycji: 3"));
+	}
+	
+	@Test
+	public void testPrintedInvoiceWithOnlyOneProductAddedTwice(){
+		Invoice invoice = createEmptyInvoice();
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal("100")),1827);
+		invoice.addProduct(new DairyProduct("Mleko", new BigDecimal("100")),1827);
+		String printedInvoice = invoice.printedVersion();
+		Assert.assertThat(printedInvoice, Matchers.containsString("Liczba pozycji: 1"));
+	}
 	
 	private Invoice createEmptyInvoice() {
 		return new Invoice();
@@ -166,6 +216,6 @@ public class InvoiceTest {
 		assertEquals(expected.stripTrailingZeros(), actual.stripTrailingZeros());
 	}
 	
-
+	
 
 }
